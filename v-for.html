@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="item in people">
+                {{item.name}}
+                <br>
+                <img :src="item.img" :alt="item.alt">
+                <br>
+                <div v-if="item.gender === 'male'">
+                    男<i class="bi bi-gender-male"></i>
+                </div>
+                <div v-else="item.gender === 'female'">
+                    女<i class="bi bi-gender-female"></i>
+                </div>
+                {{item.age}}
+                &nbsp
+                <button @click="item.age++">增加</button>
+                <button @click="item.age--">減少</button>
+            </li>
+            <br>
+        </ul>
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+
+                    people: [
+                        {
+                            name: '都塔塔',
+                            img: 'https://i.pinimg.com/564x/04/0a/6c/040a6cc66571dcec507c9328c50eff0a.jpg',
+                            alt: '照片遺失',
+                            gender: 'female',
+                            age: 20,
+                        },
+                        {
+                            name: '馬丁尼',
+                            img: 'https://i.pinimg.com/564x/4c/a4/83/4ca483466c175c80344ea0b77051e242.jpg',
+                            alt: '照片遺失',
+                            gender: 'male',
+                            age: 28,
+
+                        },
+                        {
+                            name: '小豬胖奇',
+                            img: 'https://i.pinimg.com/564x/ff/38/c4/ff38c45d64b53399350a1b33abf62245.jpg',
+                            alt: '照片遺失',
+                            gender: 'male',
+                            age: 5,
+
+                        },
+                    ]
+                }
+            },
+            methods: {},
+            mounted() { },
+        });
+        app.mount('#app');
+    </script>
+</body>
+
+</html>
