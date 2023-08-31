@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- bootstrap icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- vueJS -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- getdata -->
+    <script src="./menu.js"></script>
+    <title>random user</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <button type="button" class="btn btn-outline-primary my-3" @click="status = !status">
+                <p v-if="status" class="card-text">清晰</p>
+                <p v-else class="card-text">模糊</p>
+            </button>
+            <div class="row">
+                <div v-for="item in data" class="col-md-4 mb-3">
+                    <div class="card">
+                        <button type="button" class="btn btn-outline-danger rounded-pill position-absolute"
+                            @click="item.favorite = !item.favorite">
+                            <i v-if="!item.favorite" class="bi bi-heart"></i>
+                            <i v-else class="bi bi-heart-fill"></i>
+                        </button>
+                        <img v-if="status" :src="item.picture.large" class="card-img-top" alt="">
+                        <img v-else :src="item.picture.thumbnail" class="card-img-top" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name.first }}  {{ item.name.last }}</h5>
+                            <p v-if="item.gender === 'male'">
+                                男 <i class="bi bi-gender-male"></i>
+                            </p>
+                            <p v-else="item.gender === 'female'">
+                                女 <i class="bi bi-gender-female"></i>
+                            </p>
+                            <p class="card-text">dob: {{ dob(item.dob.date) }}</p>
+                            <p>
+                                Email: <a :href="`mailto: ${ item.email }`"> {{ item.email }}</a>
+                            </p>
+                            <p>
+                                Phone: <a :href="`tel: ${ item.phone }`"> {{ item.phone }}</a>
+                            </p>
+                            <p>
+                                Address:<a :href="`https://www.google.com/maps/search/${
+                                        item.location.street.number }, ${ item.location.street.name }, ${
+                                        item.location.country }, ${ item.location.state },${ item.location.city }`"
+                                    target="_blank">{{
+                                    item.location.street.number }}, {{ item.location.street.name }}, {{
+                                    item.location.country }}, {{ item.location.state }},{{ item.location.city }}</a>
+                                <iframe
+                                    :src="`https://www.google.com/maps?q=${ item.location.coordinates.latitude },${item.location.coordinates.longitude }&z=10&output=embed`"
+                                    width="100%" height="300px" style="border:0;" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.esm-browser.min.js';
+
+        createApp({
+
+            data() {
+                return {
+                    data: menu,
+                    status: true,
+
+                }
+            },
+            methods: {
+                dob(birth) {
+                    return birth.substr(0, 10)
+                },
+
+                fetchData() {
+                    let url = 'https://randomuser.me/api/?results=10';
+
+                    fetch(url)
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            console.log(data);
+                            this.data = data.menu
+                        })
+                },
+
+                getRandomuser() {
+                    axios.get('https://randomuser.me/api/?results=10')
+                        .then((item) => {
+                            this.data = item.data.menu;
+                        })
+                }
+            },
+            mounted() {
+
+                this.getRandomuser()
+
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
